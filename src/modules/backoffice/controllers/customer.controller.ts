@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseInterceptors, HttpException, HttpStatus } from "@nestjs/common";
+import { Controller, Get, Post, Param, Body, UseInterceptors, HttpException, HttpStatus, Put } from "@nestjs/common";
 import { Result } from "../models/result.model";
 import { ValidatorInterceptor } from "src/interceptors/validator.interceptor";
 import { CreateCustomerDto } from "../dtos/customer/create-customer.dto";
@@ -6,12 +6,12 @@ import { AccountService } from "../services/account.service";
 import { User } from "../models/user.model";
 import { CustomerService } from "../services/customer.service";
 import { Customer } from "../models/customer.model";
-import { Address } from "../models/address.model";
 import { CreateCustomerContract } from "../contracts/customer/create-customer.contract";
-import { CreateAddressContract } from "../contracts/customer/create-address.contract";
-import { Pet } from "../models/pet.model";
-import { CreatePetContract } from "../contracts/customer/create-pet.contract";
 import { QueryDto } from "../dtos/query.dto";
+import { UpdateCustomerContract } from "../contracts/customer/update-customer.contract";
+import { UpdateCustomerDto } from "../dtos/customer/update-customer.dto";
+import { CreditCard } from "../models/credit-card.model ";
+import { QueryContract } from "../contracts/query.contract";
 
 // localhost:3000/v1/customers
 @Controller('v1/customers')
@@ -48,27 +48,21 @@ export class CustomerController {
         }
     }
 
-    @Post(':document/pets')
-    @UseInterceptors(new ValidatorInterceptor(new CreatePetContract()))
-    async createPet(@Param('document') document, @Body() model: Pet){
+    @Put(':document')
+    @UseInterceptors(new ValidatorInterceptor(new UpdateCustomerContract()))
+    async update(@Param('document') document, @Body() model: UpdateCustomerDto){
         try {
-            await this.customerService.createPet(document, model);
+            await this.customerService.update(document, model);
             return new Result(null, true, model, null);
         } catch (error) {
             throw new HttpException(
-                new Result('Não foi possível adicionar seu pet', false, null, error), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Post(':document/pets/:id')
-    @UseInterceptors(new ValidatorInterceptor(new CreatePetContract()))
-    async updatePet(@Param('document') document, @Param('id') id, @Body() model: Pet){
-        try {
-            await this.customerService.updatePet(document, id, model);
-            return new Result(null, true, model, null);
-        } catch (error) {
-            throw new HttpException(
-                new Result('Não foi possível atualizar seu pet', false, null, error), HttpStatus.BAD_REQUEST);
+                new Result(
+                    'Não foi possível atualizar seu cliente',
+                    false,
+                    null,
+                    error
+                )
+            , HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -85,8 +79,25 @@ export class CustomerController {
     }
 
     @Post('query')
+    @UseInterceptors(new ValidatorInterceptor(new QueryContract()))
     async query(@Body() model: QueryDto){
         const customers = await this.customerService.query(model);
         return new Result(null, true, customers, null);
+    }
+
+    @Put(':document')
+    @UseInterceptors(new ValidatorInterceptor(new UpdateCustomerContract()))
+    async createCreditCard(@Param('document') document, @Body() model: CreditCard){
+        try {
+            await this.customerService.saveOrUpdateCreditCard(document, model);
+            return new Result(null, true, model, null);
+        } catch (error) {
+            // Rollback manual
+            throw new HttpException(
+                new Result(
+                    'Não foi possível adicionar seu cartão de crédito', false, null, error
+                )
+            , HttpStatus.BAD_REQUEST);
+        }
     }
 }

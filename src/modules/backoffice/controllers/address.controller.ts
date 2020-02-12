@@ -2,7 +2,7 @@ import { Controller, Post, Param, Body, UseInterceptors, HttpException, HttpStat
 import { Result } from "src/modules/backoffice/models/result.model";
 import { Address } from "src/modules/backoffice/models/address.model";
 import { ValidatorInterceptor } from "src/interceptors/validator.interceptor";
-import { CreateAddressContract } from "src/modules/backoffice/contracts/customer/create-address.contract";
+import { CreateAddressContract } from "src/modules/backoffice/contracts/address/create-address.contract";
 import { AddressService } from "src/modules/backoffice/services/address.service";
 import { AddressType } from "src/modules/backoffice/enums/address.type.enum";
 

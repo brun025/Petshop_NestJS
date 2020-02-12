@@ -3,9 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Customer } from '../models/customer.model';
 import { CreditCard } from '../models/credit-card.model ';
-import { QueryDto } from '../dtos/query.dto';
-// import { QueryDto } from 'src/modules/backoffice/dtos/query.dto';
-// import { UpdateCustomerDto } from '../dtos/customer/update-customer.dto';
+import { QueryDto } from 'src/modules/backoffice/dtos/query.dto';
+import { UpdateCustomerDto } from 'src/modules/backoffice/dtos/customer/update-customer.dto';
 
 @Injectable()
 export class CustomerService {
@@ -16,9 +15,9 @@ export class CustomerService {
         return await customer.save();
     }
 
-    // async update(document: string, data: UpdateCustomerDto): Promise<Customer> {
-    //     return await this.model.findOneAndUpdate({ document }, data);
-    // }
+    async update(document: string, data: UpdateCustomerDto): Promise<Customer> {
+        return await this.model.findOneAndUpdate({ document }, data);
+    }
 
     async find(document): Promise<Customer> {
         return await this.model

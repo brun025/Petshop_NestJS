@@ -10,8 +10,7 @@ import { AddressType } from '../enums/address.type.enum';
 @Injectable()
 export class AddressService {
     constructor(
-        @InjectModel('Customer') private readonly model: Model<Customer>,
-        private readonly httpService: HttpService) { }
+        @InjectModel('Customer') private readonly model: Model<Customer>) { }
 
     async create(document: string, data: Address, type: AddressType): Promise<Customer> {
         const options = { upsert: true }; // new: true, setDefaultsOnInsert: true };
@@ -30,8 +29,8 @@ export class AddressService {
         }
     }
 
-    getAddressByZipCode(zipcode: string) {
-        const url = `https://viacep.com.br/ws/${zipcode}/json/`;
-        return this.httpService.get(url);
-    }
+    // getAddressByZipCode(zipcode: string) {
+    //     const url = `https://viacep.com.br/ws/${zipcode}/json/`;
+    //     return this.httpService.get(url);
+    // }
 }

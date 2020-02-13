@@ -1,12 +1,25 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { BackofficeModule } from './modules/backoffice/backoffice.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { StoreModule } from 'src/modules/store/store.module';
 
 
 @Module({
   imports: [
     MongooseModule.forRoot('CONNECTION_STRING'),
-    BackofficeModule
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: '127.0.0.1',
+      port: 3306,
+      username: 'root',
+      password: 'root',
+      database: 'petshop_nest',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true
+    }),
+    BackofficeModule,
+    StoreModule
   ],
   controllers: [],
   providers: [],

@@ -34,5 +34,5 @@ CREATE TABLE `petshop_nest`.`orderitem` (
   `productid` INT NOT NULL,
   `orderid` INT NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT FK_OrderItemProduct FOREIGN KEY (productid) REFERENCES product(id),
+  CONSTRAINT FK_OrderItemProduct FOREIGN KEY (productid) REFERENCES `product`(id),
   CONSTRAINT FK_OrderItemOrder FOREIGN KEY (orderid) REFERENCES `orders`(id));

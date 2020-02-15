@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity()
+@Entity({
+    name: 'products'
+})
 export class Product{
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,4 +12,10 @@ export class Product{
 
     @Column('text')
     description: string;
+
+    @Column('decimal')
+    price: number;
+
+    @Column('decimal')
+    quantityOnHand: number;
 }

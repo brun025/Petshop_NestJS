@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-// import { Md5 } from "md5-typescript";
+import { Md5 } from "md5-typescript";
 import { User } from '../models/user.model';
 import { Customer } from '../models/customer.model';
 
@@ -32,22 +32,15 @@ export class AccountService {
 
     async authenticate(username, password): Promise<Customer> {
         var customer = await this.customerModel
-            .findOne(
-                { 
-                    'user.username': username,
-                    'user.password': password
-                }
-            )
-            .populate('user', '-password')
+            .findOne({ 'document': username })
+            .populate('user')
             .exec();
 
-        return customer;
-
-        // const pass = await Md5.init(`${password}${process.env.SALT_KEY}`);
-        // if (pass.toString() == customer.user.password.toString()) {
-        //     return customer;
-        // } else {
-        //     return null;
-        // }
+        const pass = await Md5.init(`${password}${process.env.SALT_KEY}`);
+        if (pass.toString() == customer.user.password.toString()) {
+            return customer;
+        } else {
+            return null;
+        }
     }
 }

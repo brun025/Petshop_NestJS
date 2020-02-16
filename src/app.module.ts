@@ -3,11 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BackofficeModule } from './modules/backoffice/backoffice.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { StoreModule } from 'src/modules/store/store.module';
-
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('CONNECTION_STRING'),
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(process.env.CONNECTION_STRING),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: '127.0.0.1',

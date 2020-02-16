@@ -1,7 +1,4 @@
 import { Controller, Get, UseGuards, Post, Req, UseInterceptors, Body, HttpException, HttpStatus } from "@nestjs/common";
-import { AuthGuard } from '@nestjs/passport';
-// import { JwtAuthGuard } from "src/shared/guards/auth.guard";
-// import { AuthService } from "src/shared/services/auth.service";
 import { AuthenticateDto } from "../dtos/account/authenticate.dto";
 import { ResetPasswordDto } from "../dtos/account/reset-password.dto";
 import { ChangePasswordDto } from "../dtos/account/change-password.dto";
@@ -9,8 +6,6 @@ import { AccountService } from "../services/account.service";
 import { ResultDto } from "../dtos/result.dto";
 import { AuthService } from "src/modules/shared/services/auth.service";
 import { JwtAuthGuard } from "src/modules/shared/guards/auth.guard";
-import { request } from "http";
-import { RoleInterceptor } from "src/modules/shared/interceptors/role.interceptor";
 import { Guid } from "guid-typescript";
 
 @Controller('v1/accounts')
@@ -38,7 +33,7 @@ export class AccountController {
         return new ResultDto(null, true, token, null);
     }
 
-    // // Resetar a senha
+    // Resetar a senha
     @Post('reset-password')
     async resetPassword(@Body() model: ResetPasswordDto): Promise<any> {
         try {

@@ -9,9 +9,21 @@ import { AccountService } from 'src/modules/backoffice/services/account.service'
 import { CustomerService } from 'src/modules/backoffice/services/customer.service';
 import { AddressService } from 'src/modules/backoffice/services/address.service';
 import { PetService } from 'src/modules/backoffice/services/pet.service';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthService } from '../shared/services/auth.service';
+import { JwtStrategy } from '../shared/strategies/jwt.strategy';
+import { AccountController } from './controllers/account.controller';
 
 @Module({
     imports: [
+        PassportModule.register({defaultStrategy: 'jwt'}),
+        JwtModule.register({
+            secretOrPrivateKey: 'secretKey',
+            signOptions:{
+                expiresIn: 3600
+            },
+        }),
         MongooseModule.forFeature([
             {
                 name: 'Customer',
@@ -23,6 +35,7 @@ import { PetService } from 'src/modules/backoffice/services/pet.service';
             },
         ])],
     controllers: [
+        AccountController,
         AddressController,
         CustomerController,
         PetController,
@@ -31,7 +44,9 @@ import { PetService } from 'src/modules/backoffice/services/pet.service';
         AccountService,
         CustomerService,
         AddressService,
-        PetService
+        PetService,
+        AuthService,
+        JwtStrategy,
     ],
 })
 export class BackofficeModule {}

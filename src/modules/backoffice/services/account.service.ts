@@ -17,27 +17,37 @@ export class AccountService {
         return await user.save();
     }
 
-    async findByUsername(username): Promise<User> {
-        return await this.userModel
-            .findOne({ username: username })
-            .exec();
-    }
+    // async findByUsername(username): Promise<User> {
+    //     return await this.userModel
+    //         .findOne({ username: username })
+    //         .exec();
+    // }
+    // async findByUsername(username){
+    //     return new User(username, '123456789', true);
+    // }
 
     async update(username: string, data: any): Promise<User> {
         return await this.userModel.findOneAndUpdate({ username }, data);
     }
 
-    // async authenticate(username, password): Promise<Customer> {
-    //     var customer = await this.customerModel
-    //         .findOne({ document: username })
-    //         .populate('user')
-    //         .exec();
+    async authenticate(username, password): Promise<Customer> {
+        var customer = await this.customerModel
+            .findOne(
+                { 
+                    'user.username': username,
+                    'user.password': password
+                }
+            )
+            .populate('user', '-password')
+            .exec();
 
-    //     const pass = await Md5.init(`${password}${process.env.SALT_KEY}`);
-    //     if (pass.toString() == customer.user.password.toString()) {
-    //         return customer;
-    //     } else {
-    //         return null;
-    //     }
-    // }
+        return customer;
+
+        // const pass = await Md5.init(`${password}${process.env.SALT_KEY}`);
+        // if (pass.toString() == customer.user.password.toString()) {
+        //     return customer;
+        // } else {
+        //     return null;
+        // }
+    }
 }

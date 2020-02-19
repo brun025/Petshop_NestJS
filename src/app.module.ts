@@ -4,6 +4,7 @@ import { BackofficeModule } from './modules/backoffice/backoffice.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { StoreModule } from 'src/modules/store/store.module';
 import { ConfigModule } from '@nestjs/config';
+import { AgendaModule } from './agenda/agenda.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { ConfigModule } from '@nestjs/config';
       synchronize: true
     }),
     BackofficeModule,
-    StoreModule
+    StoreModule,
+    AgendaModule
   ],
   controllers: [],
   providers: [],
